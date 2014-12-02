@@ -4,6 +4,7 @@
   "description": "A complete polyfill for viewport units.",
   "author": "Ryan Leckey",
   "main": "index.js",
+  "ignore": [],
   "dependencies": {
     "jquery": "~2.1.1",
     "polyfill": "*"
