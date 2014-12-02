@@ -60,6 +60,9 @@
 
   $(function() {
 
+    // Hide <body/> for now
+    $("body").css({"visibility": "hidden", "display": "none"});
+
     var options = {
       keywords: {
         declarations: [
@@ -72,36 +75,51 @@
       }
     };
 
+    var rules = [];
+    var update = function() {
+      var lines = [];
+
+      // Iterate through each matched rule
+      rules.each(function (rule) {
+
+        // Gather the properties and get an object of the declaration
+        var decl = rule.getDeclaration();
+
+        // Convert any matched viewport-units in the declaration to their
+        // equiv. pixel values
+        decl = convertDecl(decl);
+
+        // Push the converted declaration
+        lines.push(rule.getSelectors());
+        lines.push("{");
+
+        for (var name in decl) {
+          lines.push(name + ": " + decl[name] + ";");
+        }
+
+        lines.push("}");
+      });
+
+      // Build a <style/> element and attach it to <head>/
+      var text = lines.join("\n");
+
+      // Append the new style element
+      $("head").append("<style type='text/css'>" + text + "</style>");
+
+      // Show <body/> again
+      $("body").css({"visibility": "visible", "display": "block"});
+    };
+
     Polyfill(options)
-      .doMatched(function(rules) {
-        var lines = [];
+      .doMatched(function(rules_) {
+        rules = rules_;
 
-        // Iterate through each matched rule
-        rules.each(function (rule) {
+        // Add a 'resize' listener to update styles
+        $(window).off('.polyfill-viewport-units');
+        $(window).on('resize.polyfill-viewport-units', update);
 
-          // Gather the properties and get an object of the declaration
-          var decl = rule.getDeclaration();
-
-          // Convert any matched viewport-units in the declaration to their
-          // equiv. pixel values
-          decl = convertDecl(decl);
-
-          // Push the converted declaration
-          lines.push(rule.getSelectors());
-          lines.push("{");
-
-          for (var name in decl) {
-            lines.push(name + ": " + decl[name] + ";");
-          }
-
-          lines.push("}");
-        });
-
-        // Build a <style/> element and attach it to <head>/
-        var text = lines.join("\n");
-
-        // Append the new style element
-        $("head").append("<style type='text/css'>" + text + "</style>");
+        // Update immediately
+        update();
       });
 
   });
