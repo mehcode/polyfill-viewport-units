@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "A complete polyfill for viewport units.",
   "author": "Ryan Leckey",
+  "main": "index.js",
   "dependencies": {
     "jquery": "~2.1.1",
     "polyfill": "*"
