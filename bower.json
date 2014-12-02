@@ -1,6 +1,8 @@
 {
   "name": "polyfill-viewport-units",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "A complete polyfill for viewport units.",
+  "author": "Ryan Leckey",
   "dependencies": {
     "jquery": "~2.1.1",
     "polyfill": "*"
